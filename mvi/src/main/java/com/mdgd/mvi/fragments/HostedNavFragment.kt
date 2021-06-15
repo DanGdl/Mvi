@@ -51,8 +51,8 @@ abstract class HostedNavFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setModel(createModel())
-        if (model != null) {
-            lifecycle.addObserver(model!!)
+        model?.apply {
+            lifecycle.addObserver(this)
         }
     }
 
@@ -63,8 +63,8 @@ abstract class HostedNavFragment<
     }
 
     override fun onDestroy() {
-        if (model != null) {
-            lifecycle.removeObserver(model!!)
+        model?.apply {
+            lifecycle.removeObserver(this)
         }
         super.onDestroy()
     }
@@ -72,16 +72,18 @@ abstract class HostedNavFragment<
 
     override fun onStart() {
         super.onStart()
-        model!!.getStateObservable().observe(this, this)
-        model!!.getActionObservable().observe(this, { action ->
-            action.visit(this as VIEW)
-        })
+        model?.apply {
+            getStateObservable().observe(this@HostedNavFragment, this@HostedNavFragment)
+            getActionObservable().observe(this@HostedNavFragment, Observer { action ->
+                action.visit(this as VIEW)
+            })
+        }
     }
 
     override fun onStop() {
-        if (model != null) {
-            model!!.getActionObservable().removeObservers(this)
-            model!!.getStateObservable().removeObservers(this)
+        model?.apply {
+            getActionObservable().removeObservers(this@HostedNavFragment)
+            getStateObservable().removeObservers(this@HostedNavFragment)
         }
         super.onStop()
     }

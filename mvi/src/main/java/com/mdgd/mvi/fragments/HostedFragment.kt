@@ -51,8 +51,8 @@ abstract class HostedFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setModel(createModel())
-        if (model != null) {
-            lifecycle.addObserver(model!!)
+        model?.apply {
+            lifecycle.addObserver(this)
         }
     }
 
@@ -63,8 +63,8 @@ abstract class HostedFragment<
     protected abstract fun createModel(): VIEW_MODEL
 
     override fun onDestroy() {
-        if (model != null) {
-            lifecycle.removeObserver(model!!)
+        model?.apply {
+            lifecycle.removeObserver(this)
         }
         super.onDestroy()
     }
@@ -72,16 +72,18 @@ abstract class HostedFragment<
 
     override fun onStart() {
         super.onStart()
-        model!!.getStateObservable().observe(this, this)
-        model!!.getActionObservable().observe(this, { action ->
-            action.visit(this as VIEW)
-        })
+        model?.apply {
+            getStateObservable().observe(this@HostedFragment, this@HostedFragment)
+            getActionObservable().observe(this@HostedFragment, Observer { action ->
+                action.visit(this as VIEW)
+            })
+        }
     }
 
     override fun onStop() {
-        if (model != null) {
-            model!!.getActionObservable().removeObservers(this)
-            model!!.getStateObservable().removeObservers(this)
+        model?.apply {
+            getActionObservable().removeObservers(this@HostedFragment)
+            getStateObservable().removeObservers(this@HostedFragment)
         }
         super.onStop()
     }

@@ -6,8 +6,9 @@ import com.mdgd.mvi.states.ScreenState
 
 abstract class MviViewModel<V, S : ScreenState<V, S>, A> : ViewModel(),
     FragmentContract.ViewModel<S, A> {
-    private val stateHolder =
-        MutableLiveData<S>() // TODO: use StateFlow: val uiState: StateFlow<LatestNewsUiState> = _uiState ?
+
+    // TODO: use StateFlow: val uiState: StateFlow<LatestNewsUiState> = _uiState ?
+    private val stateHolder = MutableLiveData<S>()
     private val actionHolder = MutableLiveData<A>()
 
     override fun getStateObservable(): LiveData<S> {

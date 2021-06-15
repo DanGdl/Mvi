@@ -46,12 +46,8 @@ abstract class HostedDialogFragment<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setModel(createModel())
-        if (model != null) {
-            lifecycle.addObserver(model!!)
-            model!!.getStateObservable().observe(this, this)
-            model!!.getActionObservable().observe(this, { action ->
-                action.visit(this as VIEW)
-            })
+        model?.apply {
+            lifecycle.addObserver(this)
         }
     }
 
@@ -61,12 +57,28 @@ abstract class HostedDialogFragment<
 
     override fun onDestroy() {
         // order matters
-        if (model != null) {
-            model!!.getActionObservable().removeObservers(this)
-            model!!.getStateObservable().removeObservers(this)
-            lifecycle.removeObserver(model!!)
+        model?.apply {
+            lifecycle.removeObserver(this)
         }
         super.onDestroy()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        model?.apply {
+            getStateObservable().observe(this@HostedDialogFragment, this@HostedDialogFragment)
+            getActionObservable().observe(this@HostedDialogFragment, Observer { action ->
+                action.visit(this as VIEW)
+            })
+        }
+    }
+
+    override fun onStop() {
+        model?.apply {
+            getActionObservable().removeObservers(this@HostedDialogFragment)
+            getStateObservable().removeObservers(this@HostedDialogFragment)
+        }
+        super.onStop()
     }
 
     protected abstract fun createModel(): VIEW_MODEL?
