@@ -1,3 +1,4 @@
+include ':adapter'
 include ':mvi'
 include ':app'
 rootProject.name = "Mvi"
