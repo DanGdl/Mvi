@@ -17,7 +17,7 @@ abstract class AbstractVH<T>(itemView: View) : RecyclerView.ViewHolder(itemView)
         bind(item)
     }
 
-    abstract fun bind(item: T)
+    protected open fun bind(item: T) {}
 
     protected fun hasModel() = model != null
 }
