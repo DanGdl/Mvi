@@ -75,7 +75,7 @@ abstract class HostedNavFragment<
         model?.apply {
             getStateObservable().observe(this@HostedNavFragment, this@HostedNavFragment)
             getActionObservable().observe(this@HostedNavFragment, Observer { action ->
-                action.visit(this as VIEW)
+                action.visit(this@HostedNavFragment as VIEW)
             })
         }
     }

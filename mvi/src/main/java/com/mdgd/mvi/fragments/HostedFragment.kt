@@ -75,7 +75,7 @@ abstract class HostedFragment<
         model?.apply {
             getStateObservable().observe(this@HostedFragment, this@HostedFragment)
             getActionObservable().observe(this@HostedFragment, Observer { action ->
-                action.visit(this as VIEW)
+                action.visit(this@HostedFragment as VIEW)
             })
         }
     }

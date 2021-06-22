@@ -68,7 +68,7 @@ abstract class HostedDialogFragment<
         model?.apply {
             getStateObservable().observe(this@HostedDialogFragment, this@HostedDialogFragment)
             getActionObservable().observe(this@HostedDialogFragment, Observer { action ->
-                action.visit(this as VIEW)
+                action.visit(this@HostedDialogFragment as VIEW)
             })
         }
     }
