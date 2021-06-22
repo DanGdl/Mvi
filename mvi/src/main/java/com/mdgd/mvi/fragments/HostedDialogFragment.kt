@@ -29,7 +29,7 @@ abstract class HostedDialogFragment<
             fragmentHost = context as HOST
         } catch (e: Throwable) {
             val hostClassName = ((javaClass.genericSuperclass as ParameterizedType)
-                .actualTypeArguments[1] as Class<*>).canonicalName
+                    .actualTypeArguments[4] as Class<*>).canonicalName
             throw RuntimeException(
                 "Activity must implement " + hostClassName
                         + " to attach " + javaClass.simpleName, e
