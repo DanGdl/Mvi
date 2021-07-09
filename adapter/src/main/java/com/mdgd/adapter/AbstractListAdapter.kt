@@ -5,14 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 abstract class AbstractListAdapter<T : ViewHolderDataItem, VH_PARAMS, CLICK>
     (diffCallback: DiffUtil.ItemCallback<T>) : ListAdapter<T, AbstractVH<T>>(diffCallback) {
 
     private val factories: Map<Int, ViewHolderFactory<VH_PARAMS, T>> = createViewHolderFactories()
-    protected val clicksFlow = MutableStateFlow<CLICK?>(null)
+    protected val clicksFlow =
+        MutableSharedFlow<CLICK?>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     open fun getClicksFlow(): Flow<CLICK?> {
         return clicksFlow
