@@ -14,9 +14,9 @@ abstract class AbstractListAdapter<T : ViewHolderDataItem, VH_PARAMS, CLICK>
 
     private val factories: Map<Int, ViewHolderFactory<VH_PARAMS, T>> = createViewHolderFactories()
     protected val clicksFlow =
-        MutableSharedFlow<CLICK?>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<CLICK>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    open fun getClicksFlow(): Flow<CLICK?> {
+    open fun getClicksFlow(): Flow<CLICK> {
         return clicksFlow
     }
 
