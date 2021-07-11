@@ -13,8 +13,9 @@ abstract class AbstractListAdapter<T : ViewHolderDataItem, VH_PARAMS, CLICK>
     (diffCallback: DiffUtil.ItemCallback<T>) : ListAdapter<T, AbstractVH<T>>(diffCallback) {
 
     private val factories: Map<Int, ViewHolderFactory<VH_PARAMS, T>> = createViewHolderFactories()
-    protected val clicksFlow =
-        MutableSharedFlow<CLICK>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    protected val clicksFlow = MutableSharedFlow<CLICK>(
+            extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     open fun getClicksFlow(): Flow<CLICK> {
         return clicksFlow
